@@ -20,7 +20,7 @@
 		},
 		{
 			"Name": "autoannounce",
-			"DefaultValue": "敬请享受游戏！" // edit this to change autoannounce, leave empty if desired.
+			"DefaultValue": "欢迎来到超好玩的服务器 QQ群456665285" // edit this to change autoannounce, leave empty if desired.
 		}
 	],
 	"Scripts": [
