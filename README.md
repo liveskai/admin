@@ -37,6 +37,8 @@
 - 参数1: weaponId: 武器的文件名
 - 参数2: mods 武器的配件(可以最多四个)
 - `gift <weaponId> <someone/imc/militia/all>` // 强制给予指定玩家一把武器，可以是原版里没有的、通过其他mod加进来的武器，但注意不能给予配件且输错武器文件名服务器将会崩溃
+- `gift weaponId someone save`// 给玩家一把武器，复活后仍然保存
+- `gift clear all`// 清除武器
 - `rearm someone/imc/militia/all` // 立刻补满指定玩家的技能
 - `fly someone/imc/militia/all` // 使指定玩家可以穿墙
 - `titanfall/tf <someone/imc/militia/all>`// 为指定玩家降落泰坦
@@ -67,7 +69,4 @@
 - 参数1: value: 空中加速的值
 - 参数2: save: 复活后是否保留空中加速
 
-## Additional Information
-If you require any assistance, or encounter any bugs in this mod, message me on the [Northstar Discord Server](https://discord.gg/northstar) (x3Karma#6984)
-
-Link to the [GitHub Repo](https://github.com/x3Karma/Admin-Abuse-Mod).
+## 1.2.8
