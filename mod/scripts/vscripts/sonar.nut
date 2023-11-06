@@ -17,15 +17,15 @@ bool function SonarCMD(entity player, array<string> args)
 	CheckAdmin(player);
 	if (hadGift_Admin != true)
 	{
-		Kprint( player, "未检测到管理员权限.");
+		Kprint( player, "Admin permission not detected.");
 		return true;
 	}
 
 	// if player only typed "sonar"
 	if (args.len() == 0)
 	{
-		Kprint( player, "至少输入一个有效的参数.");
-		Kprint( player, "格式: sonar <playerID> <playerID2> <playerID3> ... / imc / militia / all");
+		Kprint( player, "Give a valid argument.");
+		Kprint( player, "Example: sonar <playerID> <playerID2> <playerID3> ... / imc / militia / all");
 		// print every single player's name and their id
 		int i = 0;
 		foreach (entity p in GetPlayerArray())
@@ -72,7 +72,7 @@ bool function SonarCMD(entity player, array<string> args)
 
     if (args.len() == 1 )
     {
-        Kprint( player, "请输入持续时间(duration).")
+        Kprint( player, "Please insert a duration.")
         return true;
     }
     int duration
@@ -82,7 +82,7 @@ bool function SonarCMD(entity player, array<string> args)
     }
 
 	if (args.len() > 2) {
-		Kprint( player, "只需输入两个参数.")
+		Kprint( player, "Only two arguments required.")
         return true;
 	}
 

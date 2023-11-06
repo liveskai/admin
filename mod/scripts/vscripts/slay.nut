@@ -17,15 +17,15 @@ bool function SlayCMD(entity player, array<string> args)
 	CheckAdmin(player);
 	if (hadGift_Admin != true)
 	{
-		Kprint( player, "未检测到管理员权限.");
+		Kprint( player, "Admin permission not detected.");
 		return true;
 	}
 
 	// if player only typed "gift"
 	if (args.len() == 0)
 	{
-		Kprint( player, "至少输入一个有效的参数.");
-		Kprint( player, "格式: slay <playerID> <playerID2> <playerID3> ... / imc / militia / all");
+		Kprint( player, "Give a valid argument.");
+		Kprint( player, "Example: slay <playerID> <playerID2> <playerID3> ... / imc / militia / all");
 		// print every single player's name and their id
 		int i = 0;
 		foreach (entity p in GetPlayerArray())
@@ -36,7 +36,7 @@ bool function SlayCMD(entity player, array<string> args)
 		}
 		return true;
 	}
-
+	CMDsender = player
 	switch (args[0])
 	{
 		case ("all"):
@@ -70,6 +70,7 @@ bool function SlayCMD(entity player, array<string> args)
 		break;
 	}
 	if (args.len() > 1) {
+		CMDsender = player
 		array<string> playersname = args.slice(1);
 		foreach (string playerId in playersname)
 		{
@@ -91,11 +92,11 @@ void function Slay(entity player)
 		if ( IsAlive( player ) )
 		{
 			player.Die()
-			Kprint( player, "处死了 " + player.GetPlayerName() + " !")
+			Kprint( CMDsender, "Slayed " + player.GetPlayerName() + "!")
 		}
 	} catch(e)
 	{
-		Kprint( player, "无法处死 " + player.GetPlayerName() + ". 玩家可能不存在.")
+		Kprint( CMDsender, "Unable to slay " + player.GetPlayerName() + ". Could be unalive lol.")
 	}
 #endif
 }

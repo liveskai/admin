@@ -122,6 +122,7 @@ void function KCommandsInit()
     KcommandArr.append(new_KCommandStruct(["vanish", "v"],                                    true, VanishCMD))
     KcommandArr.append(new_KCommandStruct(["unvanish", "uv"],                                 true, UnVanishCMD))
     KcommandArr.append(new_KCommandStruct(["mod"],                                            true, GiveWMWait))
+    KcommandArr.append(new_KCommandStruct(["spawnturrettick"],                                true, SpawnTurretTick))
 }
 
 /*

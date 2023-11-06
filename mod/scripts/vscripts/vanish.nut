@@ -23,15 +23,15 @@ bool function VanishCMD(entity player, array<string> args)
 	CheckAdmin(player);
 	if (hadGift_Admin != true)
 	{
-		Kprint( player, "未检测到管理员权限.");
+		Kprint( player, "Admin permission not detected.");
 		return true;
 	}
 
 	// if player only typed "gift"
 	if (args.len() == 0)
 	{
-		Kprint( player, "至少输入一个有效的参数.");
-		Kprint( player, "格式: vanish/v <playername> <playername2> <playername3> ... / imc / militia / all");
+		Kprint( player, "Give a valid argument.");
+		Kprint( player, "Example: vanish/v <playername> <playername2> <playername3> ... / imc / militia / all");
 		// print every single player's name and their id
 		int i = 0;
 		foreach (entity p in GetPlayerArray())
@@ -42,7 +42,7 @@ bool function VanishCMD(entity player, array<string> args)
 		}
 		return true;
 	}
-
+	CMDsender = player
 	switch (args[0])
 	{
 		case ("all"):
@@ -97,7 +97,7 @@ void function Vanish(entity player)
 		return;
 	} catch(e)
 	{
-		print( "Unable to vanish " + player.GetPlayerName() + " . Could be dead lol." )
+		print( "Unable to vanish " + player.GetPlayerName() + ". Could be unalive lol." )
 	}
 #endif
 }
@@ -110,15 +110,15 @@ bool function UnVanishCMD(entity player, array<string> args)
 	CheckAdmin(player);
 	if (hadGift_Admin != true)
 	{
-		Kprint( player, "未检测到管理员权限.");
+		Kprint( player, "Admin permission not detected.");
 		return true;
 	}
 
 	// if player only typed "gift"
 	if (args.len() == 0)
 	{
-		Kprint( player, "至少输入一个有效的参数.");
-		Kprint( player, "格式: unvanish/uv <playername> <playername2> <playername3> ... / imc / militia / all");
+		Kprint( player, "Give a valid argument.");
+		Kprint( player, "Example: unvanish/uv <playername> <playername2> <playername3> ... / imc / militia / all");
 		// print every single player's name and their id
 		int i = 0;
 		foreach (entity p in GetPlayerArray())
@@ -184,7 +184,7 @@ void function UnVanish(entity player)
 		return;
 	} catch(e)
 	{
-		print( "Unable to unvanish " + player.GetPlayerName() + " . Could be dead lol.")
+		print( "Unable to unvanish " + player.GetPlayerName() + ". Could be unalive lol.")
 	}
 #endif
 }

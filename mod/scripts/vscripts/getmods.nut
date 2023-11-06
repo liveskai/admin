@@ -24,7 +24,7 @@ bool function GetWM(entity player, array<string> args)
 	CheckAdmin(player);
 	if (hadGift_Admin != true)
 	{
-		Kprint( player, "未检测到管理员权限.");
+		Kprint( player, "Admin permission not detected.");
 		return true;
 	}
 	string weaponId
@@ -47,12 +47,12 @@ bool function GetWM(entity player, array<string> args)
 	}
 	else if (successfulweapons.len() == 1)
 	{
-		Kprint( player, "武器ID是 " + successfulweapons[0])
+		Kprint( player, "Weapon ID is " + successfulweapons[0])
 		weaponId = successfulweapons[0]
 	}
 	else if (successfulweapons.len() == 0)
 	{
-		Kprint( player, "无法检测到武器.")
+		Kprint( player, "Unable to detect weapon.")
 		return true;
 	}
 
@@ -71,7 +71,7 @@ bool function GetWM(entity player, array<string> args)
 
 	if (args.len() > 1)
 	{
-		Kprint( player, "只需输入一个参数.")
+		Kprint( player, "Only 1 argument required.")
 		return true;
 	}
 	return true;
@@ -88,16 +88,16 @@ bool function ForceGetWM(entity player, array<string> args)
 	CheckAdmin(player);
 	if (hadGift_Admin != true)
 	{
-		Kprint( player, "未检测到管理员权限.");
+		Kprint( player, "Admin permission not detected.");
 		return true;
 	}
 
 	// if player only typed "fgift"
 	if (args.len() == 0)
 	{
-		Kprint( player, "至少输入一个有效的参数.");
-		Kprint( player, "格式: fgift/forcegift <weaponId> <playerId>");
-		Kprint( player, "若不知道武器ID, 你可以通过控制台输入give, 按下tab键来滚动显示武器ID.");
+		Kprint( player, "Give a valid argument.");
+		Kprint( player, "Example: fgift/forcegift <weaponId> <playerId>");
+		Kprint( player, "You can check weaponId by typing give and pressing tab to scroll through the IDs.");
 		// print every single player's name and their id
 		int i = 0;
 		foreach (entity p in GetPlayerArray())
@@ -156,14 +156,14 @@ bool function ForceGetWM(entity player, array<string> args)
 			return true;
 		} catch (exception)
 		{
-			Kprint( player,  "无法获取 " + weaponId + " 的配件. 确定武器ID是正确的吗?" );
+			Kprint( player,  "Couldn't fetch mods for " + weaponId + ". Are you sure its the correct ID?" );
 			return true;
 		}
 	}
 
 	if (args.len() > 1)
 	{
-		Kprint( player, "只需输入一个参数.")
+		Kprint( player, "Only 1 argument required.")
 		return true;
 	}
 	#endif

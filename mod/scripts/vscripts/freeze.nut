@@ -16,14 +16,14 @@ bool function FreezeCMD(entity player, array < string > args) {
     hadGift_Admin = false;
     CheckAdmin(player);
     if (hadGift_Admin != true) {
-        Kprint( player, "未检测到管理员权限.");
+        Kprint( player, "Admin permission not detected.");
         return true;
     }
 
     // if player only typed "health"
     if (args.len() == 0) {
-        Kprint( player, "至少输入一个有效的参数.");
-        Kprint( player, "格式: freeze <playerId>, playerId = imc / militia / all");
+        Kprint( player, "Give a valid argument.");
+        Kprint( player, "Example: freeze <playerId>, playerId = imc / militia / all");
         // print every single player's name and their id
         int i = 0;
         foreach(entity p in GetPlayerArray()) {
@@ -69,10 +69,10 @@ bool function FreezeCMD(entity player, array < string > args) {
 
     if (args.len() > 1 )
 	{
-		Kprint( player, "只需输入一个参数.")
+		Kprint( player, "Only 1 arguments required.")
 		return true;
 	}
-
+    CMDsender = player
     thread Freeze(sheep1)
     #endif
     return true;
@@ -84,14 +84,14 @@ bool function unFreezeCMD(entity player, array < string > args) {
     hadGift_Admin = false;
     CheckAdmin(player);
     if (hadGift_Admin != true) {
-        Kprint( player, "未检测到管理员权限.");
+        Kprint( player, "Admin permission not detected.");
         return true;
     }
 
     // if player only typed "health"
     if (args.len() == 0) {
-        Kprint( player, "至少输入一个有效的参数.");
-        Kprint( player, "格式: unfreeze <playerId>, playerId = imc / militia / all");
+        Kprint( player, "Give a valid argument.");
+        Kprint( player, "Example: unfreeze <playerId>, playerId = imc / militia / all");
         // print every single player's name and their id
         int i = 0;
         foreach(entity p in GetPlayerArray()) {
@@ -137,10 +137,10 @@ bool function unFreezeCMD(entity player, array < string > args) {
 
     if (args.len() > 1 )
 	{
-		Kprint( player, "只需输入一个参数.")
+		Kprint( player, "Only 1 arguments required.")
 		return true;
 	}
-
+    CMDsender = player
     thread unFreeze(sheep1)
     #endif
     return true;
@@ -154,6 +154,10 @@ void function Freeze(array < entity > player) {
         localPlayer.ConsumeDoubleJump()
         localPlayer.DisableWeaponViewModel()
     }
+    if (player.len() == 1)
+        Kprint( CMDsender, "Froze " + player[0].GetPlayerName() + "!")
+    else
+        Kprint( CMDsender, "Froze " + player.len() + " players!")
     #endif
 }
 
@@ -164,5 +168,9 @@ void function unFreeze(array < entity > player) {
         localPlayer.MovementEnable()
         localPlayer.EnableWeaponViewModel()
     }
+    if (player.len() == 1)
+        Kprint( CMDsender, "Thawed " + player[0].GetPlayerName() + "!")
+    else
+        Kprint( CMDsender, "Thawed " + player.len() + " players!")
     #endif
 }

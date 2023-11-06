@@ -42,7 +42,7 @@ bool function GiveWM(entity player, array<string> args)
 	CheckAdmin(player);
 	if (hadGift_Admin != true && bypassPerms != true)
 	{
-		Kprint( player, "未检测到管理员权限.");
+		Kprint( player, "Admin permission not detected.");
 		return true;
 	}
 	entity weapon = player.GetActiveWeapon();
@@ -54,10 +54,17 @@ bool function GiveWM(entity player, array<string> args)
 
 		if (args.len() == 0)
 		{
-			Kprint( player, "请输入有效的配件ID.");
-			Kprint( player, "不能输入多于四个配件.");
-			Kprint( player, "你可以通过输入同样的配件ID来去除该配件.");
-			CMDsender = player
+			if (CMDsender != player)
+			{
+				Kprint( CMDsender, "Give a valid mod.");
+				Kprint( CMDsender, "You can get rid of a mod by typing the same modId.");
+			}
+			else
+			{
+				Kprint( player, "Give a valid mod.");
+				Kprint( player, "You can get rid of a mod by typing the same modId.");
+				CMDsender = player
+			}
 			PrintWeaponMods(weapon);
 			return true;
 		}
@@ -72,16 +79,22 @@ bool function GiveWM(entity player, array<string> args)
 				modId = amods[a];
 			} catch(exception2)
 			{
-				Kprint( player, "错误: 未知ID, 假定其为配件ID.");
+				Kprint( player, "Error: Unknown ID, assuming its a modId");
 			}
 			weapon = player.GetActiveWeapon();
 			GiveWeaponMod(player, modId, weapon)
 			newString += (modId + " ");
 		}
-		Kprint( player, "给予 " + player.GetPlayerName() + " 的配件ID为 " + newString);
+		if (CMDsender != player)
+			Kprint( CMDsender, "Mods given to " + player.GetPlayerName() + " are " + newString);
+		else
+			Kprint( player, "Mods given to " + player.GetPlayerName() + " are " + newString);
 		bypassPerms = false;
 	} else {
-		Kprint( player, "不可用的武器.");
+		if (CMDsender != player)
+			Kprint( CMDsender, "Invalid weapon detected.");
+		else
+			Kprint( player, "Invalid weapon detected.");
 		return true;
 	}
 	return true;
@@ -105,20 +118,18 @@ void function GiveWeaponMod(entity player, string modId, entity weapon)
 				break;
 			}
 		}
-		if( !removed )
-		{
-			if (mods.len() < 5 || modId.find("burn_mod") != -1)
-				mods.append( modId ); // catch more than 4 mods
-			else if (mods.len() > 4) {
-				Kprint( player, "错误: 多余四个配件. 试着移除一些.");
-				return;
-			}
-		}
 		player.TakeWeaponNow( weaponId );
-		try {
-			player.GiveWeapon( weaponId, mods );
-		} catch(exception2) {
-			Kprint( player, "错误: 配件冲突.");
+		try
+		{
+			player.GiveWeapon( weaponId, mods )
+		}
+		catch(exception2) 
+		{
+			if (CMDsender != player)
+				Kprint( CMDsender, "Error: Mod conflicts with one another.");
+			else
+				Kprint( player, "Error: Mod conflicts with one another.");
+
 			for( int i = 0; i < mods.len(); ++i )
 			{
 				if( mods[i] == modId )

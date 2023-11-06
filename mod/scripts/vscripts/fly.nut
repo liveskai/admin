@@ -16,15 +16,15 @@ bool function FlyCMD(entity player, array<string> args)
 	CheckAdmin(player);
 	if (hadGift_Admin != true)
 	{
-		Kprint( player, "未检测到管理员权限.");
+		Kprint( player, "Admin permission not detected.");
 		return true;
 	}
 
 	// if player only typed "gift"
 	if (args.len() == 0)
 	{
-		Kprint( player, "至少输入一个有效的参数.");
-		Kprint( player, "格式: fly <playerId> <playerId2> ... / imc / militia / all");
+		Kprint( player, "Give a valid argument.");
+		Kprint( player, "Example: fly <playerId> <playerId2> ... / imc / militia / all");
 		// print every single player's name and their id
 		int i = 0;
 		foreach (entity p in GetPlayerArray())
@@ -63,12 +63,15 @@ bool function FlyCMD(entity player, array<string> args)
 		break;
 
 		default:
+			CMDsender = player
             CheckPlayerName(args[0])
 				foreach (entity p in successfulnames)
                     Fly(p)
 		break;
 	}
-	if (args.len() > 1) {
+	if (args.len() > 1) 
+	{
+		CMDsender = player
 		array<string> playersname = args.slice(1);
 		foreach (string playerId in playersname)
 		{
@@ -85,8 +88,14 @@ void function Fly( entity player )
 {
 	#if SERVER
 	if ( player.IsNoclipping() )
+	{
 		player.SetPhysics( MOVETYPE_WALK )
+		Kprint( CMDsender, player.GetPlayerName() + " stopped noclipping.")
+	}
 	else
+	{
 		player.SetPhysics( MOVETYPE_NOCLIP )
+		Kprint( CMDsender, player.GetPlayerName() + " started noclipping.")
+	}
 #endif
 }

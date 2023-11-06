@@ -65,14 +65,14 @@ bool function AnnounceCMD(entity player, array < string > args) {
     hadGift_Admin = false;
     CheckAdmin(player);
     if (hadGift_Admin != true) {
-        Kprint( player, "未检测到管理员权限.");
+        Kprint( player, "Admin permission not detected.");
         return true;
     }
 
     // if player only typed "gift"
     if (args.len() == 0) {
-        Kprint( player, "至少输入一个有效的参数.");
-        Kprint( player, "格式: announce/a <playerId> <text1> <text2> ... / imc / militia / all");
+        Kprint( player, "Give a valid argument.");
+        Kprint( player, "Example: announce/a <playerId> <text1> <text2> ... / imc / militia / all");
         // print every single player's name and their id
         int i = 0;
         foreach(entity p in GetPlayerArray()) {
@@ -116,7 +116,7 @@ bool function AnnounceCMD(entity player, array < string > args) {
 
     // if player typed "gift correctId" with no further arguments
     if (args.len() == 1) {
-        Kprint( player, "格式: announce/a <playerId> <text>");
+        Kprint( player, "Example: announce/a <playerId> <text>");
         return true;
     }
 

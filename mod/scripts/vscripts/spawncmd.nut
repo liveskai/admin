@@ -4,6 +4,7 @@ global function SpawnViper
 global function AddCommands
 global function KSpawnTitan
 global function rpwn
+global function SpawnTurretTick
 
 global function registerFunctions
 global function registerFunctionsAfter
@@ -50,6 +51,7 @@ void function AddCommands()
 	#if SERVER
 	AddClientCommandCallback("cycletitanid", cycleTitanId);
 	AddClientCommandCallback("spawntitan", KSpawnTitan);
+	AddClientCommandCallback("spawnturrettick", SpawnTurretTick)
 	AddClientCommandCallback("spawnviper", SpawnViper);
 	AddClientCommandCallback("rpwn", rpwn);
 	AddClientCommandCallback("respawn", rpwn);
@@ -59,6 +61,13 @@ void function AddCommands()
 bool function KSpawnTitan(entity a, array<string> args)
 {
 #if SERVER
+	hadGift_Admin = false;
+	CheckAdmin(a);
+	if (hadGift_Admin != true)
+	{
+		Kprint( a, "Admin permission not detected.");
+		return true;
+	}
 	entity player = GetPlayerArray()[0];
 	vector origin = GetPlayerCrosshairOrigin( player );
 	vector angles = player.EyeAngles();
@@ -97,14 +106,14 @@ bool function rpwn(entity player, array<string> args)
 	CheckAdmin(player);
 	if (hadGift_Admin != true)
 	{
-		Kprint( player, "未检测到管理员权限.");
+		Kprint( player, "Admin permission not detected.");
 		return true;
 	}
 	// if player only typed rpwn/respawn with no further arguments
 	if (args.len() == 0)
 	{
-		Kprint( player, "至少输入一个有效的参数.");
-		Kprint( player, "格式: rpwn/respawn <someone/imc/militia/all> [someone/spawn/nothing] [pilot/titan]");
+		Kprint( player, "Give a valid argument.");
+		Kprint( player, "Example: rpwn/respawn <someone/imc/militia/all> [someone/spawn/nothing] [pilot/titan]");
 		// print every single player's name and their id
 		int i = 0;
 		foreach (entity p in GetPlayerArray())
@@ -119,6 +128,7 @@ bool function rpwn(entity player, array<string> args)
 	array<entity> players = GetPlayerArray();
 	array<entity> player1 = []
 	entity player2 = null
+	CMDsender = player
 	switch (args[0])
 	{
 		case ("all"):
@@ -185,8 +195,8 @@ bool function rpwn(entity player, array<string> args)
 	}
 	if (args.len() > 3)
 	{
-		Kprint( player, "参数过多.")
-		Kprint( player, "格式: rpwn/respawn <someone/imc/militia/all> [someone/spawn/nothing] [pilot/titan]");
+		Kprint( player, "Too many arguments.")
+		Kprint( player, "Example: rpwn/respawn <someone/imc/militia/all> [someone/spawn/nothing] [pilot/titan]");
 		return true;
 	}
 	foreach (sheep in player1)
@@ -308,6 +318,13 @@ void function RespawnAtSpawn(entity player, bool ISUSINGTITAN = false)
 bool function SpawnViper(entity player, array<string> args)
 {
 #if SERVER
+	hadGift_Admin = false;
+	CheckAdmin(player);
+	if (hadGift_Admin != true)
+	{
+		Kprint( player, "Admin permission not detected.");
+		return true;
+	}
 	const CROSSHAIR_VERT_OFFSET = 32;
 	string bossId = "Viper";
 
@@ -345,4 +362,81 @@ bool function SpawnViper(entity player, array<string> args)
 	DispatchSpawn( npc );
 	return true;
 	#endif
+}
+
+
+
+bool function SpawnTurretTick( entity player, array<string> args )
+{
+	hadGift_Admin = false;
+	CheckAdmin(player);
+	if (hadGift_Admin != true)
+	{
+		Kprint( player, "Admin permission not detected.");
+		return false;
+	}
+
+	if (args.len() > 0)
+	{
+		Kprint( player, "Too many arguments." )
+		return false
+	}
+	int team = player.GetTeam()
+
+	vector origin = GetPlayerCrosshairOrigin( player );
+	entity tick = CreateFragDrone( team, origin, <0,0,0> )
+	SetSpawnOption_AISettings(tick, "npc_frag_drone_fd")
+	tick.EnableNPCFlag( NPC_ALLOW_PATROL | NPC_ALLOW_INVESTIGATE | NPC_NEW_ENEMY_FROM_SOUND)
+	tick.EnableNPCMoveFlag(NPCMF_WALK_ALWAYS)
+	DispatchSpawn( tick )
+	tick.Minimap_AlwaysShow( TEAM_IMC, null )
+	tick.Minimap_AlwaysShow( TEAM_MILITIA, null )
+	tick.SetValueForModelKey( $"models/robots/drone_frag/drone_frag.mdl" )
+	StatusEffect_AddEndless( tick, eStatusEffect.speed_boost, 1 )
+
+	tick.SetTitle( "The Fuck You Tick" )
+	tick.SetTakeDamageType( DAMAGE_NO )
+	tick.SetDamageNotifications( false )
+	tick.SetNPCMoveSpeedScale( 10.0 )
+	ShowName( tick )
+
+
+	entity turret = CreateEntity( "npc_turret_sentry" )
+	turret.SetOrigin( origin + <0,0,30> )
+	turret.SetAngles( <0,0,0> )
+	turret.SetBossPlayer( player )
+	turret.ai.preventOwnerDamage = true
+	turret.StartDeployed()
+	SetTeam( turret, team )
+
+	SetSpawnOption_AISettings( turret, "npc_turret_sentry_burn_card_ap_fd" )
+	turret.SetParent( tick )
+	DispatchSpawn( turret )
+	turret.SetMaxHealth(500)
+	turret.SetHealth(turret.GetMaxHealth())
+
+	array<entity> players = GetPlayerArrayOfEnemies( tick.GetTeam() )
+	if ( players.len() != 0 )
+	{
+		entity player = GetClosest2D( players, tick.GetOrigin() )
+		tick.AssaultPoint( player.GetOrigin() )
+	}
+	UpdateEnemyMemoryWithinRadius( tick, 1000 )
+	thread TickThink( tick )
+	return true
+}
+
+void function TickThink( entity tick )
+{
+	array<entity> players
+	while( IsAlive( tick ) )
+	{
+		players = GetPlayerArrayOfEnemies( tick.GetTeam() )
+		if ( players.len() != 0 )
+		{
+			entity player = GetClosest2D( players, tick.GetOrigin() )
+			tick.AssaultPoint( player.GetOrigin() )
+		}
+		wait RandomFloatRange(10.0,20.0)
+	}
 }

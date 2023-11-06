@@ -20,16 +20,16 @@ bool function RemoveWeaponsCMD(entity player, array<string> args)
 	CheckAdmin(player);
 	if (hadGift_Admin != true)
 	{
-		Kprint( player, "未检测到管理员权限.");
+		Kprint( player, "Admin permission not detected.");
 		return true;
 	}
 
 	// if player only typed "gift"
 	if (args.len() == 0)
 	{
-		Kprint( player, "至少输入一个有效的参数.");
-		Kprint( player, "格式: removeweapon/rw <playerId> <playerId2> ... / imc / militia / all");
-		Kprint( player, "注意这只能移除主武器");
+		Kprint( player, "Give a valid argument.");
+		Kprint( player, "Example: removeweapon/rw <playerId> <playerId2> ... / imc / militia / all");
+		Kprint( player, "This removes main weapons only lol");
 		// print every single player's name and their id
 		int i = 0;
 		foreach (entity p in GetPlayerArray())
@@ -41,6 +41,7 @@ bool function RemoveWeaponsCMD(entity player, array<string> args)
 		return true;
 	}
 	// if player typed "rw somethinghere"
+	CMDsender = player
 	switch (args[0])
 	{
 		case ("all"):
@@ -74,6 +75,7 @@ bool function RemoveWeaponsCMD(entity player, array<string> args)
 		break;
 	}
 	if (args.len() > 1) {
+		CMDsender = player
 		array<string> playersname = args.slice(1);
 		foreach (string playerId in playersname)
 		{
@@ -99,10 +101,10 @@ void function RemoveWeapon( entity player )
 			try
 			{
 				player.TakeWeaponNow(weaponId)
-				Kprint( player, "移除了 " + player.GetPlayerName() + " 的武器!")
+				Kprint( CMDsender, "Removed " + player.GetPlayerName() + "'s weapons!")
 			} catch(exception)
 			{
-				Kprint( player, "无法取走 " + player.GetPlayerName() + " 的 " + weaponId + " !")
+				Kprint( CMDsender, "Can't take " + player.GetPlayerName() + "'s " + weaponId + "!")
 			}
 		}
 	}

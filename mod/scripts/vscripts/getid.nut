@@ -1,6 +1,6 @@
-global function getIDCommand
-global function getID
-global function getIDCMD
+global function getIDCommand;
+global function getID;
+global function getIDCMD;
 
 void function getIDCommand() {
     #if SERVER
@@ -14,14 +14,14 @@ bool function getIDCMD(entity player, array < string > args) {
     hadGift_Admin = false;
     CheckAdmin(player);
     if (hadGift_Admin != true) {
-        Kprint( player, "未检测到管理员权限.");
+        Kprint( player, "Admin permission not detected.");
         return true;
     }
 
     // if player only typed "gift"
     if (args.len() == 0) {
-        Kprint( player, "至少输入一个有效的参数.");
-        Kprint( player, "格式: getid <playername>");
+        Kprint( player, "Give a valid argument.");
+        Kprint( player, "Example: getid <playername>");
         // print every single player's name and their id
         int i = 0;
         foreach(entity p in GetPlayerArray()) {
@@ -65,7 +65,7 @@ bool function getIDCMD(entity player, array < string > args) {
 
     if (args.len() > 1 )
 	{
-		Kprint( player, "只需输入一个参数.")
+		Kprint( player, "Only 1 argument required.")
 		return true;
 	}
     CMDsender = player

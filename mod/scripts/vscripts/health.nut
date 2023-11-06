@@ -15,14 +15,14 @@ bool function HealthCMD(entity player, array < string > args) {
     hadGift_Admin = false;
     CheckAdmin(player);
     if (hadGift_Admin != true) {
-        Kprint( player, "未检测到管理员权限.");
+        Kprint( player, "Admin permission not detected.");
         return true;
     }
 
     // if player only typed "health"
     if (args.len() == 0) {
-        Kprint( player, "至少输入一个有效的参数.");
-        Kprint( player, "格式: health/hp <playerId> <value> , playerId = imc / militia / all");
+        Kprint( player, "Give a valid argument.");
+        Kprint( player, "Example: health/hp <playerId> <value> , playerId = imc / militia / all");
         // print every single player's name and their id
         int i = 0;
         foreach(entity p in GetPlayerArray()) {
@@ -66,6 +66,7 @@ bool function HealthCMD(entity player, array < string > args) {
 
     // if player typed "gift correctId" with no further arguments
     if (args.len() == 1) {
+        CMDsender = player
         GetHealth(sheep1)
         return true;
     }
@@ -76,7 +77,7 @@ bool function HealthCMD(entity player, array < string > args) {
 
     if (args.len() > 2 )
 	{
-		Kprint( player, "只需输入两个参数.")
+		Kprint( player, "Only 2 arguments required.")
 		return true;
 	}
     CMDsender = player
@@ -97,7 +98,7 @@ void function Health(array < entity > player, int value) {
         {
 		    localPlayer.SetMaxHealth(value)
             localPlayer.SetHealth(value)
-		    Kprint( CMDsender, "设定 " + localPlayer.GetPlayerName() + " 的生命值为: " + localPlayer.GetHealth())
+		    Kprint( CMDsender, localPlayer.GetPlayerName() + "'s health: " + localPlayer.GetHealth())
         } else
         {
             int oldvalue = value
@@ -105,7 +106,7 @@ void function Health(array < entity > player, int value) {
                 value = 2500
             localPlayer.SetMaxHealth(value)
             localPlayer.SetHealth(oldvalue)
-		    Kprint( CMDsender, "设定 " + localPlayer.GetPlayerName() + " 的泰坦生命值为: " + localPlayer.GetHealth())
+		    Kprint( CMDsender, localPlayer.GetPlayerName() + "'s titan health: " + localPlayer.GetHealth())
         }
         }
     }
@@ -119,9 +120,9 @@ void function GetHealth(array < entity > player) {
         if (IsAlive(localPlayer))
         {
         if (!localPlayer.IsTitan())
-		    Kprint( CMDsender, localPlayer.GetPlayerName() + " 的生命值: " + localPlayer.GetHealth())
+		    Kprint( CMDsender, localPlayer.GetPlayerName() + "'s health: " + localPlayer.GetHealth())
         else
-		    Kprint( CMDsender, localPlayer.GetPlayerName() + " 的泰坦生命值: " + localPlayer.GetHealth())
+		    Kprint( CMDsender, localPlayer.GetPlayerName() + "'s titan health: " + localPlayer.GetHealth())
         }
     }
     #endif
