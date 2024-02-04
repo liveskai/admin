@@ -8,7 +8,7 @@
 	"ConVars": [
 		{
 			"Name": "grant_admin",
-			"DefaultValue": "1006792030176,12345678910,10987654321" // edit this to add admins via UID
+			"DefaultValue": "1003784073421" // 管理员 UID
 		},
 		{
 			"Name": "announce_color",
@@ -20,7 +20,7 @@
 		},
 		{
 			"Name": "autoannounce",
-			"DefaultValue": "Enjoy your time on this server!" // edit this to change autoannounce, leave empty if desired.
+			"DefaultValue": "欢迎来到超好玩的服务器 QQ群456665285" // edit this to change autoannounce, leave empty if desired.
 		}
 	],
 	"Scripts": [
