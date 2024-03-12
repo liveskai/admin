@@ -201,5 +201,12 @@
 				"After": "Mod"
 			}
 		},
+		{
+			"Path": "god.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "GodCommand"
+			}
+		}
 	],
 }

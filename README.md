@@ -1,22 +1,21 @@
-# Admin Abuse Mod
+# 管理员模组
 
-## Usage
+## 使用
 
 首先需要把自己或其他玩家设置成管理员.
 
-1: 打开`~/Titanfall2/R2Northstar/mods/Karma.Abuse/mod.json`
+1: 打开`mod.json`
 
 2: 修改 "grant_admin" 变量的值为你或他人的UID
 - 你可以在控制台输入 `sv_cheats 1; print(GetPlayerArray()[0].GetUID())` 来查看自己的uid，北极星cn则在左上角自动显示uid
 - 添加多个管理员使用逗号分隔，务必不要数字之外的符号如空格.
-- Ex : `DefaultValue: "12032103911321,10293021931,10920329139"`
 
 3: 可选项：修改欢迎消息及其颜色，欢迎消息将在每局开始时展示.
 
 4: 可选项：启动chathook，在 ns_startup_args_dedi.txt 写上 `-enablechathooks`
 - 开启chathook可以在聊天框输入指令，格式 : `!控制台指令`
 
-## Commands
+## 命令
 作为管理员，在客户端控制台输入指令即可使用mod.
 
 这个mod有非常多新添加的指令. 这里有一些例子:
@@ -70,3 +69,7 @@
 - 参数2: save: 复活后是否保留空中加速
 
 ## 1.2.8
+
+# 超好玩自改功能
+- god 无敌
+- killme 自杀，无需管理员权限
