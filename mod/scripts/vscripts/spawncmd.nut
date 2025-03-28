@@ -58,31 +58,27 @@ void function AddCommands()
 	#endif
 }
 
-bool function KSpawnTitan(entity a, array<string> args)
+bool function KSpawnTitan(entity player, array<string> args)
 {
 #if SERVER
 	hadGift_Admin = false;
-	CheckAdmin(a);
+	CheckAdmin(player)
 	if (hadGift_Admin != true)
 	{
-		Kprint( a, "Admin permission not detected.");
-		return true;
+		Kprint(player, "Admin permission not detected.")
+		return true
 	}
-	entity player = GetPlayerArray()[0];
-	vector origin = GetPlayerCrosshairOrigin( player );
-	vector angles = player.EyeAngles();
-	angles.x = 0;
-	angles.z = 0;
-	string titanId = currentTitanId[TitanGroup];
-
-	vector spawnPos = origin;
-	vector spawnAng = angles;
-	int team = TEAM_BOTH;
-	var teamTagPos = titanId.find( "#" )
-	entity spawnNpc = CreateNPCTitan( "npc_titan", team, spawnPos, spawnAng, [] );
-	SetSpawnOption_NPCTitan( spawnNpc, TITAN_HENCH );
-	SetSpawnOption_AISettings( spawnNpc, titanId );
-	DispatchSpawn( spawnNpc );
+	vector origin = GetPlayerCrosshairOrigin( player )
+	vector angles = player.EyeAngles()
+	angles.x = 0
+	angles.z = 0
+	
+	string titanId = currentTitanId[TitanGroup]
+	if(args.len()>0)
+		titanId=args[0]
+	entity titan=CreateNPCTitan( "npc_titan", TEAM_BOTH, origin, angles )
+	SetSpawnOption_AISettings( titan, titanId )
+	DispatchSpawn( titan )
 	#endif
 	return true;
 }
